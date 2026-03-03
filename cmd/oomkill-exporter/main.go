@@ -29,6 +29,10 @@ import (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	var (
 		listenAddress       string
 		containerdSocket    string
@@ -48,7 +52,7 @@ func main() {
 
 	if versionFlag {
 		fmt.Printf("Version: %s\n", bininfo.Version())
-		os.Exit(0)
+		return 0
 	}
 
 	// Setup structured logging
@@ -83,7 +87,7 @@ func main() {
 	exp, err := exporter.New(cfg, logger)
 	if err != nil {
 		logger.Error("Failed to create exporter", "error", err)
-		os.Exit(1)
+		return 1
 	}
 
 	// Setup signal handling
@@ -98,14 +102,11 @@ func main() {
 	)
 
 	// Run exporter
-	exitCode := 0
 	if err := exp.Run(ctx); err != nil && !errors.Is(err, context.Canceled) {
 		logger.Error("Exporter failed", "error", err)
-		exitCode = 1
-	} else {
-		logger.Info("Exporter stopped gracefully")
+		return 1
 	}
 
-	stop()
-	os.Exit(exitCode)
+	logger.Info("Exporter stopped gracefully")
+	return 0
 }
