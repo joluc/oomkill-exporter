@@ -98,10 +98,14 @@ func main() {
 	)
 
 	// Run exporter
+	exitCode := 0
 	if err := exp.Run(ctx); err != nil && !errors.Is(err, context.Canceled) {
 		logger.Error("Exporter failed", "error", err)
-		os.Exit(1)
+		exitCode = 1
+	} else {
+		logger.Info("Exporter stopped gracefully")
 	}
 
-	logger.Info("Exporter stopped gracefully")
+	stop()
+	os.Exit(exitCode)
 }
