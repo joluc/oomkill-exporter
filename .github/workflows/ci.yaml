@@ -46,7 +46,7 @@ jobs:
       - name: Run tests and generate coverage report
         run: make test-coverage
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: code-coverage
           path: build/coverage.out
@@ -60,7 +60,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v6
       - name: Download coverage artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: code-coverage
       - name: Post coverage report
