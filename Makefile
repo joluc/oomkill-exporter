@@ -38,12 +38,12 @@ build:
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
 	go build $(GO_BUILDFLAGS) \
-		-ldflags '-s -w \
+		-ldflags "-s -w \
 			-X github.com/sapcc/go-api-declarations/bininfo.binName=oomkill-exporter \
 			-X github.com/sapcc/go-api-declarations/bininfo.version=$(BININFO_VERSION) \
 			-X github.com/sapcc/go-api-declarations/bininfo.commit=$(BININFO_COMMIT_HASH) \
 			-X github.com/sapcc/go-api-declarations/bininfo.buildDate=$(BININFO_BUILD_DATE) \
-			$(GO_LDFLAGS)' \
+			$(GO_LDFLAGS)" \
 		-o $(BUILD_DIR)/$(BINARY_NAME) ./$(CMD_DIR)
 
 # Install binary

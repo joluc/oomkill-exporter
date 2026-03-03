@@ -16,6 +16,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -23,18 +24,18 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/sapcc/go-api-declarations/bininfo"
 	"github.com/joluc/oomkill-exporter/internal/exporter"
+	"github.com/sapcc/go-api-declarations/bininfo"
 )
 
 func main() {
 	var (
-		listenAddress        string
-		containerdSocket     string
-		containerdNamespace  string
-		regexpPattern        string
-		versionFlag          bool
-		logLevel             string
+		listenAddress       string
+		containerdSocket    string
+		containerdNamespace string
+		regexpPattern       string
+		versionFlag         bool
+		logLevel            string
 	)
 
 	flag.StringVar(&listenAddress, "listen-address", ":9102", "The address to listen on for HTTP requests")
@@ -97,7 +98,7 @@ func main() {
 	)
 
 	// Run exporter
-	if err := exp.Run(ctx); err != nil && err != context.Canceled {
+	if err := exp.Run(ctx); err != nil && !errors.Is(err, context.Canceled) {
 		logger.Error("Exporter failed", "error", err)
 		os.Exit(1)
 	}

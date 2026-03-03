@@ -40,9 +40,9 @@ var prometheusContainerLabels = map[string]string{
 }
 
 type Config struct {
-	ListenAddress      string
-	ContainerdSocket   string
-	RegexpPattern      string
+	ListenAddress       string
+	ContainerdSocket    string
+	RegexpPattern       string
 	ContainerdNamespace string
 }
 

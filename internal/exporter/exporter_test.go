@@ -32,8 +32,7 @@ func TestGetContainerIDFromLog(t *testing.T) {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
 	// Compile the default pattern
-	pattern, err := regexp.Compile(defaultPattern)
-	require.NoError(t, err)
+	pattern := regexp.MustCompile(defaultPattern)
 
 	exp := &Exporter{
 		logger:  logger,
