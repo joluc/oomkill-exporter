@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package exporter
 
 import (
 	"errors"
-	"fmt"
+	"log/slog"
+	"os"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -24,8 +26,19 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetPodUIDFromLog(t *testing.T) {
+func TestGetContainerIDFromLog(t *testing.T) {
 	klog, podUIDs, containerIDs := getTestData()
+
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+
+	// Compile the default pattern
+	pattern, err := regexp.Compile(defaultPattern)
+	require.NoError(t, err)
+
+	exp := &Exporter{
+		logger:  logger,
+		kmesgRE: pattern,
+	}
 
 	var extractedContainerIDs []string
 	var extractedPodUIDs []string
@@ -33,14 +46,13 @@ func TestGetPodUIDFromLog(t *testing.T) {
 	for _, msg := range klog {
 		parsedMsg, err := parseMessage(msg)
 		require.NoError(t, err, "There should be no error while parsing kernel log")
-		uid, cid := getContainerIDFromLog(parsedMsg.Message)
-		fmt.Println(uid)
+		uid, cid := exp.getContainerIDFromLog(parsedMsg.Message)
 		extractedContainerIDs = append(extractedContainerIDs, cid)
 		extractedPodUIDs = append(extractedPodUIDs, uid)
 	}
 
 	require.Equal(t, containerIDs, extractedContainerIDs, "Extracted container ids do not match the expected result")
-	require.Equal(t, podUIDs, extractedPodUIDs, "Extracted container ids do not match the expected result")
+	require.Equal(t, podUIDs, extractedPodUIDs, "Extracted pod UIDs do not match the expected result")
 }
 
 func parseMessage(input string) (kmsgparser.Message, error) {
