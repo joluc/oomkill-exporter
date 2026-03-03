@@ -24,8 +24,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/joluc/oomkill-exporter/internal/exporter"
 	"github.com/sapcc/go-api-declarations/bininfo"
+
+	"github.com/joluc/oomkill-exporter/internal/exporter"
 )
 
 func main() {
