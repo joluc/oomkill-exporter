@@ -1,0 +1,67 @@
+# Default values for oomkill-exporter
+
+image:
+  repository: ghcr.io/joluc/oomkill-exporter
+  pullPolicy: IfNotPresent
+  tag: ""  # Overrides the image tag whose default is the chart appVersion
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9102"
+
+podSecurityContext: {}
+
+securityContext:
+  privileged: true  # Required to read /dev/kmsg
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 9102
+  annotations: {}
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {}
+  annotations: {}
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 100Mi
+  requests:
+    cpu: 20m
+    memory: 20Mi
+
+# Tolerations to run on all nodes
+tolerations:
+  - operator: Exists
+
+nodeSelector: {}
+
+affinity: {}
+
+# OOM Kill Exporter configuration
+config:
+  listenAddress: ":9102"
+  containerdSocket: "/run/containerd/containerd.sock"
+  containerdNamespace: "k8s.io"
+  logLevel: "info"
+  # regexpPattern: ""  # Optional custom regex pattern
+
+# Host paths
+hostPaths:
+  kmsg: /dev/kmsg
+  containerdSocket: /run/containerd/containerd.sock

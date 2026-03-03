@@ -1,0 +1,16 @@
+apiVersion: v2
+name: oomkill-exporter
+description: Prometheus exporter for Kubernetes OOM kills
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - monitoring
+  - prometheus
+  - oom
+  - kubernetes
+home: https://github.com/joluc/oomkill-exporter
+sources:
+  - https://github.com/joluc/oomkill-exporter
+maintainers:
+  - name: joluc
