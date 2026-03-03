@@ -1,3 +1,7 @@
-/kubernetes-oomkill-exporter
+/oomkill-exporter
 /*.log
 /build
+/dist
+*.test
+*.out
+.DS_Store
